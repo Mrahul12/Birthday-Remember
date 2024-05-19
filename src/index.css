@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bgimage{
+ background-image: url('./assets/bith.png');
+ background-size: 100vw 100vh;
+ background-repeat: no-repeat;
+
+}
+form{
+ /* background-color: #ffffff; */
+ background-image: url('./assets/bith.png');
+ background-size: contain;
+ background-repeat: no-repeat;
+}
+input{
+ background-color: #fffffffe;
+ width: 100%;
+}
+form[placeholder]{
+ color: #000;
+}
+h1{
+ text-shadow: 0px 0px 2px white;
+}
+label{
+ text-shadow: 1px 1px 5px white;
+}
+
+.scrollars::-webkit-scrollbar{
+display: none;
+}
