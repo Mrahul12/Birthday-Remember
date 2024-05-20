@@ -36,7 +36,7 @@ const Birthdayevent = (props) => {
   const [message, setMessage] = useState("");
   const [imageurl, setImageurl] = useState("");
   const [buttons, setButtons] = useState(false);
-
+  const[today,setToday]=useState(false)
   let audio = new Audio(music);
   const notify = () => {
     if (message.length > 0) {
@@ -158,9 +158,9 @@ const Birthdayevent = (props) => {
               }
             );
             // ========close the notification
-            // setTimeout(() => {
-            //   getNotification.close();
-            // }, 6 * 1000);
+            setTimeout(() => {
+              getNotification.close();
+            }, 6 * 1000);
 
             //======= goto next url of website
             getNotification.addEventListener("click", (e) => {
@@ -226,7 +226,10 @@ const Birthdayevent = (props) => {
     });
     setBirth(filterData);
   };
-
+// !=====Today & Tomorrow=============================
+ const handleShow = (shows) => {
+  setToday(shows)
+ };
   // !=========================================
 
   return (
@@ -245,6 +248,8 @@ const Birthdayevent = (props) => {
         handleDelete,
         setBirth,
         setBirthdate,
+        handleShow,
+        today
       }}
     >
       {props.children}

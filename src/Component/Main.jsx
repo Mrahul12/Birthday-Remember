@@ -13,7 +13,7 @@ const Main = (props) => {
 
   return (
     <>
-      <main className="flex flex-col gap-5  py-4 px-2 w-full h-screen items-center bgimage">
+      <main className="flex flex-col gap-2  py-4 px-2 w-full h-screen items-center bgimage">
         <section className="flex justify-evenly gap-4">
           <button
             className="bg-green-500 px-10 py-2 rounded text-1xl font-bold text-slate-900 shadow-[0px_0px_5px_black] hover:scale-[1.1]"

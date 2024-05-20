@@ -50,7 +50,7 @@ const Form = () => {
               htmlFor="user"
               className="text-xl  whitespace-nowrap text-ellipsis text-slate-900 font-semibold"
             >
-              Birthay Boy or Girl Name.
+              Birthday Boy or Girl Name.
             </label>
             <input
               type="text"
@@ -65,7 +65,7 @@ const Form = () => {
               htmlFor="date"
               className="text-xl text-ellipsis text-slate-900 font-semibold"
             >
-              Birthay Date...
+              Birthday Date...
             </label>
             <input
               type="date"
