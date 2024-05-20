@@ -35,9 +35,9 @@ const Birthdayevent = (props) => {
   const [showNotification, setShowNotification] = useState(false);
   const [message, setMessage] = useState("");
   const [imageurl, setImageurl] = useState("");
- const [buttons, setButtons] = useState(false);
+  const [buttons, setButtons] = useState(false);
 
-  const audio = new Audio(music);
+  let audio = new Audio(music);
   const notify = () => {
     if (message.length > 0) {
       toast(`🎂${message}`, {
@@ -53,47 +53,44 @@ const Birthdayevent = (props) => {
       audio.play();
     }
   };
-
+  // !=======show conditionally home ans dashboard======================
   const handleDisplay = (value) => {
     setShow(value);
-    setButtons(value)
+    setButtons(value);
   };
 
   // !Image upload==================================================
-   const imageHandle=(e)=>{
-
+  const imageHandle = (e) => {
     let file = e.target.files[0];
-
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {
         setImageurl(e.target.result);
       };
-
       reader.readAsDataURL(file);
     }
-   }
+  };
 
   // ! Form Submit============================
   const handleSubmit = (e) => {
     e.preventDefault();
     const names = e.target[1].value;
-    const name=names.toUpperCase();
+    const name = names.toUpperCase();
     const birthday = e.target[2].value;
-
+    const mon = birthday.slice(6, 7);
     setBirth([
       ...birth,
       {
-        id: Math.floor(Math.random() * 1000) + 1,
+        id: mon,
         name: name,
         birthdate: birthday,
-        birthmonth:'This Month Birthday',
+        birthmonth: "This Month Birthday",
         picture: imageurl,
       },
     ]);
     setBirthdate([...birthdate, birthday]);
- setImageurl('');
-   
+    setImageurl("");
+
     e.target[1].value = "";
     e.target[2].value = "";
   };
@@ -101,44 +98,57 @@ const Birthdayevent = (props) => {
   // ! Set Birthday Notification=================================
   const setDates = birthdate;
   const getDate = setDates.sort();
+  // console.log(getDate)
   const d = new Date();
   const ds = d.getDate();
   const ms = d.getMonth() + 1;
   const ys = d.getFullYear();
 
-  let currentD = `${ys}-0${ms}-${ds}T17:40:00`;
-  let expiryDate;
-  getDate.map((v) => {
-    let dates = `${v}T17:40:00`;
-    if (currentD == dates) {
-      expiryDate = new Date(dates);
+  // !===Auto Increment Year ======================================
+  birth.map((date) => {
+    if (date.birthdate.slice(0, 4) < ys) {
+      let year = ys + 1;
+      date.birthdate = `${year}-${date.birthdate.slice(5, 10)}`;
     }
   });
-
+  // !===getUsername================================
+  let currentD = `${ys}-0${ms}-${ds}`;
   let vi = currentD.slice(0, 10);
   let user;
   birth.map((username) => {
-    if (vi == username.birthdate) {
+    if (vi.slice(5, 10) == username.birthdate.slice(5, 10)) {
       user = username.name;
     }
   });
 
+  // !===useEffect Cookies==============================================
+  let expiryDate;
+  getDate.map((date) => {
+    let dateWithTime = `${date}T11:52:00`;
+    if (currentD.slice(5, 10) == date.slice(5, 10)) {
+      expiryDate = new Date(dateWithTime);
+    }
+  });
   useEffect(() => {
-    Cookies.set("cookieBirth", "birthdayCookie", { expires: expiryDate });
+    Cookies.set("myAutoCookie", "autoCookieValue", { expires: expiryDate });
     // console.log("Cookie automatically set with expiry date:", expiryDate);
-
-    const checkAndRemoveCookie = (expiryDate) => {
+    const checkAndRemoveCookie = () => {
       const currentDate = new Date();
       if (currentDate >= expiryDate) {
-        Cookies.remove("cookieBirth");
+        Cookies.remove("myAutoCookie");
         setShowNotification(true);
         notify();
-        setMessage(`${currentD
-          .slice(0, 10)
-          .split("-")
-          .reverse()
-          .join("-")},${user} Birthday .   
-        Check Birthday Remember Application. ThankYou Ji ! `);
+        setMessage(
+          `${currentD
+            .slice(0, 10)
+            .split("-")
+            .reverse()
+            .join(
+              "-"
+            )},${user} Birthday.Check Birthday Remember Application. ThankYou Ji ! `
+        );
+        // console.log(  "Good job for cookies expire" );
+        // !======Notification On device=======================\
         (async () => {
           function showNotification() {
             const getNotification = new Notification(
@@ -148,14 +158,14 @@ const Birthdayevent = (props) => {
               }
             );
             // ========close the notification
-            setTimeout(() => {
-              getNotification.close();
-            }, 5 * 1000);
+            // setTimeout(() => {
+            //   getNotification.close();
+            // }, 6 * 1000);
 
             //======= goto next url of website
             getNotification.addEventListener("click", (e) => {
               e.preventDefault();
-              window.open("http://localhost:5173/", "_self");
+              window.open();
             });
             audio.play();
           }
@@ -179,21 +189,14 @@ const Birthdayevent = (props) => {
           granted ? showNotification() : sError();
         })();
       }
-
-      // =================
-
-      // =============
     };
-
-    checkAndRemoveCookie(expiryDate);
-
+    checkAndRemoveCookie();
     const intervalId = setInterval(checkAndRemoveCookie, 3600 * 1000);
-
     return () => {
       clearInterval(intervalId);
       // console.log("Interval cleared on component unmount");
     };
-  }, [expiryDate, user]);
+  }, [expiryDate]);
 
   // !====================ServiceWorker=================================
   useEffect(() => {
@@ -216,9 +219,15 @@ const Birthdayevent = (props) => {
     localStorage.setItem("birthday", JSON.stringify(birth)); //store like {item:'[]'}
     localStorage.setItem("birthdate", JSON.stringify(birthdate)); //store like {item:'[]'}
   }, [birth, birthdate]);
-// !=================================================
+  // !====handleDelete===========================
+  const handleDelete = (ind) => {
+    const filterData = birth.filter((vs, inds) => {
+      return inds !== ind;
+    });
+    setBirth(filterData);
+  };
 
-
+  // !=========================================
 
   return (
     <Context.Provider
@@ -232,7 +241,10 @@ const Birthdayevent = (props) => {
         birthdate,
         currentD,
         imageHandle,
-        buttons
+        buttons,
+        handleDelete,
+        setBirth,
+        setBirthdate,
       }}
     >
       {props.children}

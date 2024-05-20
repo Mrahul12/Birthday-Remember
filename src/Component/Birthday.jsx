@@ -18,14 +18,14 @@ const Birthday = () => {
             return (
               <section
                 key={ind}
-                className="bg-green-400 w-full p-4 rounded shadow-[1px_1px_5px_yellow] flex justify-between items-center gap-3"
+                className="bg-green-500 w-full p-4 rounded shadow-[1px_1px_5px] flex justify-between items-center gap-3"
               >
                 <img
                   src={user.picture}
-                  alt=""
-                  className="w-[60px] h-[60px] rounded-[50%] border-2 object-center"
+                  alt={user.name.slice(0, 2)}
+                  className="w-[60px] h-[60px] rounded-[50%] border-[3.5px] border-slate-800 shadow-[0px_1px_5px_black] object-center flex justify-center items-center text-2xl font-bold text-slate-800"
                 />
-                <div className="text-justify  ">
+                <div className="text-justify  max-sm:w-[160px]">
                   <p className="text-1xl max-sm:text-[12px]  text-slate-700 text-justify font-semibold">
                     {`${user.name}, Happy many many returns of the day. Good Bless You! 🎂🎂🎊🎊`}
                   </p>
